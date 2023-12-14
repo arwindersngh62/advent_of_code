@@ -31,7 +31,9 @@ def get_number_and_indices(line):
         column_id+=1
         
     return final_list
-        
+    
+    
+          
 def generate_full_indices(tuple_index_limits):
     number = tuple_index_limits[0]
     columns = tuple_index_limits[1]
@@ -52,7 +54,6 @@ def get_symbol_indices(line):
         column+=1
     return all_symbol
       
-      
 def get_part_numbers(all_chars, all_symbols):
     total_sum = 0
     all_parts = 0
@@ -63,12 +64,33 @@ def get_part_numbers(all_chars, all_symbols):
             if surrounding_coord in all_symbols:
                 total_sum+=int(number)
     print(total_sum)
+
+def get_all_numbers_surrounding_gear(gear_coord, all_chars):
+    all_nums = []
+    for char in all_chars:
+        if gear_coord in char[1]:
+            all_nums.append(char[0])
+    return all_nums
+
+def get_all_gear_ratio(gear_coords, all_chars):
+    total_gear_ratio = 0
+    for gear_coord in gear_coords:
+        all_surrounding_nums = get_all_numbers_surrounding_gear(gear_coord, all_chars)
+        if len(all_surrounding_nums) == 2:
+            gear_ratio = int(all_surrounding_nums[0])*int(all_surrounding_nums[1])
+            total_gear_ratio+=gear_ratio
+    return total_gear_ratio
+            
+        
+        
+    
                 
 with open(data_file_path, "r") as data_file:
     all_data = data_file.readlines()
     row_num = 0
     all_chr_list = []
     all_symbol_coords = []
+    all_gear_coords = []
     for datum in all_data:
         temp_num_and_rows = get_number_and_indices(datum)
         symbol_coords = get_symbol_indices(datum)
@@ -76,6 +98,8 @@ with open(data_file_path, "r") as data_file:
             for item in symbol_coords:
                 column = item[1]
                 all_symbol_coords.append((column, row_num))
+                if item[0] == "*":
+                    all_gear_coords.append((column, row_num))
         if len(temp_num_and_rows)>0:
             low_row = row_num-1
             high_row =  row_num+1
@@ -85,4 +109,4 @@ with open(data_file_path, "r") as data_file:
                 all_chr_list.append(full_coords)
         row_num+=1
     get_part_numbers(all_chr_list, all_symbol_coords)
-    #print(all_chr_list, all_symbol_coords)
+    print(get_all_gear_ratio(all_gear_coords, all_chr_list))
