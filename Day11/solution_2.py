@@ -40,14 +40,14 @@ for row in expanded_rows_index:
         if  galaxy_indices[ind][1] < row:
             continue
         else:
-            expanded_galaxy[ind][1]+=1
+            expanded_galaxy[ind][1]+=999999
 
 for column in expanded_column_index[:-1]:
     for ind in range(len(galaxy_indices)):
         if galaxy_indices[ind][0] < column:
             continue
         else:
-            expanded_galaxy[ind][0]+=1
+            expanded_galaxy[ind][0]+=999999
 print(expanded_galaxy)
 print(galaxy_indices)
 paired = combinations(expanded_galaxy, 2)
@@ -55,5 +55,5 @@ total_sum = 0
 for value in paired:
     distance = abs(value[0][0]-value[1][0])+abs(value[0][1]-value[1][1])
     #print(value, distance)
-    total_sum+=distance
+    total_sum+=float(distance)
 print(total_sum)
